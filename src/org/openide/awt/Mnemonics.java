@@ -1,11 +1,5 @@
 /**************************************************************************
- OmegaT - Computer Assisted Translation (CAT) tool 
-          with fuzzy matching, translation memory, keyword search, 
-          glossaries, and translation leveraging into updated projects.
-
  Copyright (C) 2000-2006 Keith Godfrey and Maxym Mykhalchuk
-               Home page: http://www.omegat.org/
-               Support center: http://groups.yahoo.com/group/OmegaT/
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
