@@ -8,10 +8,17 @@ apply plugin: 'maven-publish'
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
-version = '1.0'
+version = '1.1'
 
 repositories {
     jcenter()
+}
+
+test {
+}
+
+dependencies {
+   testCompile group: 'junit', name: 'junit-dep', version: '4.10'
 }
 
 sourceSets {
@@ -21,6 +28,15 @@ sourceSets {
         }
         resources {
             srcDir 'src'
+        }
+    }
+    test {
+        java {
+            srcDir 'test/src'
+        }
+        resources {
+            srcDir 'test/src'
+            srcDir 'test/data'
         }
     }
 }
