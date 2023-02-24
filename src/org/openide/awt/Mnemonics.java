@@ -56,10 +56,21 @@ import javax.swing.JLabel;
 public final class Mnemonics extends Object {
     
     private static final Pattern RE_MNEMONIC_END = Pattern.compile("\\s*\\(&[A-Za-z0-9]\\)(?=[.\\uFF1A]*$)");
+    private static final Pattern RE_MNEMONIC_INSIDE = Pattern.compile("&(\\p{L})");
     
     /** Private constructor in order that this class is never instantiated. */
     private Mnemonics() {}
     
+    /**
+     * Removes any mnemonics in the given text. 
+     * To be used for components which do not support mnemonics at all (example: contextual menus in Swing)
+     */
+    public static String removeMnemonics(String text) {
+        text = RE_MNEMONIC_END.matcher(text).replaceFirst("");
+        text = RE_MNEMONIC_INSIDE.matcher(text).replaceFirst("$1");
+        return text;
+    }
+
     /**
      * Sets the text for a menu item or other subclass of AbstractButton.
      * <table cellspacing="2" cellpadding="3" border="1">
