@@ -20,6 +20,14 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+}
+
+test {
+    useJUnit()
+}
+
 sourceSets {
     main {
         java {
@@ -27,6 +35,15 @@ sourceSets {
         }
         resources {
             srcDir 'src'
+        }
+    }
+    test {
+        java {
+            srcDir 'test/src'
+        }
+        resources {
+            srcDir 'test/src'
+            srcDir 'test/data'
         }
     }
 }
