@@ -20,11 +20,12 @@ repositories {
     mavenCentral()
 }
 
-test {
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
 }
 
-dependencies {
-   testCompile group: 'junit', name: 'junit-dep', version: '4.10'
+test {
+    useJUnit()
 }
 
 sourceSets {
