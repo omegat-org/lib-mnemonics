@@ -13,6 +13,8 @@ import org.junit.Assert;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 
+import java.util.Locale;
+
 import static org.openide.awt.Mnemonics.isMacOS;
 
 public final class MnemonicsTest {
@@ -21,10 +23,10 @@ public final class MnemonicsTest {
     public void testRemoveMnemonics() throws Exception {
         Assert.assertEquals("Simple test", Mnemonics.removeMnemonics("&Simple test"));
         Assert.assertEquals("Rock & Roll", Mnemonics.removeMnemonics("Rock & Roll"));
-        // Parentheis at the end, but with latin characters
+        // Parenthesis at the end, but with latin characters
         Assert.assertEquals("Parenthesis", Mnemonics.removeMnemonics("Parenthesis (&P)"));
         Assert.assertEquals("Parenthesis...", Mnemonics.removeMnemonics("Parenthesis (&P)..."));
-        // Parentheis at the end, but with CJK characters
+        // Parenthesis at the end, but with CJK characters
         Assert.assertEquals("\u691C\u7D22", Mnemonics.removeMnemonics("\u691C\u7D22(&S)"));
         // Mnemonics with non-latin character: russian
         Assert.assertEquals("\u041F\u043E\u0438\u0441\u043A", Mnemonics.removeMnemonics("&\u041F\u043E\u0438\u0441\u043A"));
@@ -43,6 +45,11 @@ public final class MnemonicsTest {
         Mnemonics.setLocalizedText(item, "Rock & Roll");
         Assert.assertEquals("Rock & Roll", item.getText());
         Assert.assertEquals(-1, item.getDisplayedMnemonicIndex());
+        //
+        Mnemonics.setLocalizedText(item, "&\u041F\u043E\u0438\u0441\u043A", new Locale("ru"));
+        Assert.assertEquals("\u041F\u043E\u0438\u0441\u043A", item.getText());
+        Assert.assertEquals(isMacOS()? -1: 0, item.getDisplayedMnemonicIndex());
+        Assert.assertEquals(isMacOS()? 0: 'G', item.getDisplayedMnemonic());
     }
 
     @Test
@@ -55,5 +62,10 @@ public final class MnemonicsTest {
         Mnemonics.setLocalizedText(item, "Rock & Roll");
         Assert.assertEquals("Rock & Roll", item.getText());
         Assert.assertEquals(-1, item.getDisplayedMnemonicIndex());
+        //
+        Mnemonics.setLocalizedText(item, "&\u041F\u043E\u0438\u0441\u043A", new Locale("ru"));
+        Assert.assertEquals("\u041F\u043E\u0438\u0441\u043A", item.getText());
+        Assert.assertEquals(isMacOS()? -1: 0, item.getDisplayedMnemonicIndex());
+        Assert.assertEquals(isMacOS()? 0: 'G', item.getMnemonic());
     }
 }

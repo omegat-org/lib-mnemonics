@@ -40,6 +40,7 @@
 
 package org.openide.awt;
 
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -87,7 +88,17 @@ public final class Mnemonics extends Object {
      * @param text new label
      */
     public static void setLocalizedText(AbstractButton item, String text) {
-        setLocalizedText2(item, text);
+        setLocalizedText(item, text, null);
+    }
+
+    /**
+     * Sets the text for a menu item or other subclass of AbstractButton in given locale.
+     * @param item a button whose text will be changed
+     * @param text new label
+     * @param locale null when use system locale.
+     */
+    static void setLocalizedText(AbstractButton item, String text, Locale locale) {
+        setLocalizedText2(item, text, locale);
     }
 
     /**
@@ -97,7 +108,17 @@ public final class Mnemonics extends Object {
      * @param text new label
      */
     public static void setLocalizedText(JLabel item, String text) {
-        setLocalizedText2(item, text);
+        setLocalizedText(item, text, null);
+    }
+
+    /**
+     * Sets the text for the label or other subclass of JLabel in given locale.
+     * @param item a label whose text will be set
+     * @param text new label
+     * @param locale null when use system locale.
+     */
+    static void setLocalizedText(JLabel item, String text, Locale locale) {
+        setLocalizedText2(item, text, locale);
     }
 
 
@@ -107,7 +128,7 @@ public final class Mnemonics extends Object {
     * @param item AbstractButton/JLabel
     * @param text new label
     */
-    private static void setLocalizedText2(Object item, String text) {
+    private static void setLocalizedText2(Object item, String text, Locale locale) {
         // #17664. Handle null text also.
         if(text == null) {
             setText(item, null);
@@ -128,7 +149,7 @@ public final class Mnemonics extends Object {
         }
         else {
             setText(item, text.substring(0, i) + text.substring(i + 1));
-            setMnemonicAndIndex(item, text.charAt(i + 1), i);
+            setMnemonicAndIndex(item, text.charAt(i + 1), i, locale);
         }
     }
     
@@ -175,7 +196,7 @@ public final class Mnemonics extends Object {
      * @param ch    Mnemonic char to set, may be a char in some locale
      * @param index Index of the Character to underline under JDK1.4
      */
-    private static void setMnemonicAndIndex (Object item, char ch, int index) {
+    private static void setMnemonicAndIndex (Object item, char ch, int index, Locale locale) {
         
         // OmegaT tweak
         // if we're running on non-MacOSX, we don't set any mnemonics
@@ -193,7 +214,7 @@ public final class Mnemonics extends Object {
                 setMnemonicIndex(item, index);
             } else {
                 // it's non-latin, getting the latin correspondance
-                int latinCode = getLatinKeycode(ch);
+                int latinCode = getLatinKeycode(ch, locale);
                 setMnemonic(item, latinCode);
                 if( latinCode!=0 )
                     setMnemonicIndex(item, index);
@@ -212,11 +233,11 @@ public final class Mnemonics extends Object {
      *         or the appropriate VK_*** code (if there's no latin character 
      *         "under" the non-Latin one)
      */
-    private static int getLatinKeycode(char localeChar) {
+    private static int getLatinKeycode(char localeChar, Locale locale) {
         try {
             // associated should be a latin character, arabic digit 
             // or an integer (KeyEvent.VK_***)
-            String str=getBundle().getString("MNEMONIC_" + localeChar); 
+            String str=getBundle(locale).getString("MNEMONIC_" + localeChar);
             if( str.length()==1 )
                 return str.charAt(0); 
             else
@@ -281,8 +302,11 @@ public final class Mnemonics extends Object {
      * many times in different places of the code.
      * Does no caching, it's simply a utility method.
      */
-    private static ResourceBundle getBundle() {
-        return ResourceBundle.getBundle("org.openide.awt.Mnemonics"); 
+    private static ResourceBundle getBundle(Locale locale) {
+        if (locale == null) {
+            return ResourceBundle.getBundle("org.openide.awt.Mnemonics");
+        }
+        return ResourceBundle.getBundle("org.openide.awt.Mnemonics", locale);
     }
 
     static boolean isMacOS() {
