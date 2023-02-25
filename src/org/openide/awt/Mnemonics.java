@@ -1,9 +1,9 @@
 /**************************************************************************
  Copyright (C) 2000-2006 Keith Godfrey and Maxym Mykhalchuk
 
- This program is free software; you can redistribute it and/or modify
+ This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
+ the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
  This program is distributed in the hope that it will be useful,
@@ -12,12 +12,11 @@
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 **************************************************************************/
 
 /*
- * According to Joint Copyiright Assignment with Sun Microsystems,
+ * According to Joint Copyright Assignment with Sun Microsystems,
  * I, Maxym Mykhalchuk, as a joint-copyright holder of this file,
  * decide to distribute it under GPL.
  *
@@ -74,13 +73,13 @@ public final class Mnemonics extends Object {
 
     /**
      * Sets the text for a menu item or other subclass of AbstractButton.
-     * <p>Examples:</p>
      * <table cellspacing="2" cellpadding="3" border="1">
-     *   <tr><th>Input String</th>                                   <th>View under JDK 1.3</th>                      <th>View under JDK 1.4 or later</th></tr>
-     *   <tr><td><code>Save &amp;As<code></td>                       <td>S<u>a</u>ve As</td>                          <td>Save <u>A</u>s</td></tr>
-     *   <tr><td><code>Rock &amp; Roll<code></td>                    <td>Rock &amp; Roll</td>                         <td>Rock &amp; Roll</td></tr>
-     *   <tr><td><code>Drag &amp; &amp;Drop<code></td>               <td><u>D</u>rag &amp; Drop</td>                  <td>Drag &amp; <u>D</u>rop</td></tr>
-     *   <tr><td><code>&amp;&#1060;&#1072;&#1081;&#1083;</code></td> <td>&#1060;&#1072;&#1081;&#1083; (<u>F</u>)</td> <td><u>&#1060;</u>&#1072;&#1081;&#1083;</td></tr>
+     *   <caption>Examples:</caption>
+     *   <tr><th>Input String</th>                                   <th>View</th></tr>
+     *   <tr><td><code>Save &amp;As</code></td>                      <td>Save <u>A</u>s</td></tr>
+     *   <tr><td><code>Rock &amp; Roll</code></td>                   <td>Rock &amp; Roll</td></tr>
+     *   <tr><td><code>Drag &amp; &amp;Drop</code></td>              <td>Drag &amp; <u>D</u>rop</td></tr>
+     *   <tr><td><code>&amp;&#1060;&#1072;&#1081;&#1083;</code></td> <td><u>&#1060;</u>&#1072;&#1081;&#1083;</td></tr>
      * </table>
      * @param item a button whose text will be changed
      * @param text new label
@@ -136,11 +135,11 @@ public final class Mnemonics extends Object {
      * Searches for an ampersand in a string which indicates a mnemonic.
      * Recognizes the following cases:
      * <ul>
-     * <li>"Drag & Drop", "Ampersand ('&')" - don't have mnemonic ampersand.
-     *      "&" is not found before " " (space), or if enclosed in "'" 
+     * <li>"Drag &amp; Drop", "Ampersand ('&amp;')" - don't have mnemonic ampersand.
+     *      "&amp;" is not found before " " (space), or if enclosed in "'"
      *     (single quotation marks).
-     * <li>"&File", "Save &As..." - do have mnemonic ampersand.
-     * <li>"Rock & Ro&ll", "Underline the '&' &character" - also do have 
+     * <li>"&amp;File", "Save &amp;As..." - do have mnemonic ampersand.
+     * <li>"Rock &amp; Ro&amp;ll", "Underline the '&amp;' &amp;character" - also do have
      *      mnemonic ampersand, but the second one.
      * </ul>
      * @param text text to search
@@ -180,8 +179,7 @@ public final class Mnemonics extends Object {
         // if we're running on non-MacOSX, we don't set any mnemonics
         if (isMacOS()) {
 			setMnemonic(item, 0);
-        }
-        else {
+        } else {
             if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') 
                     || (ch >= '0' && ch <= '9')) {
                 // it's latin character or arabic digit,
@@ -237,7 +235,6 @@ public final class Mnemonics extends Object {
      *      to label and sets the latin character as mnemonics.
      * @param item AbstractButton/JLabel or subclasses
      * @param index Index of the Character to underline under JDK1.4
-     * @param latinCode Latin Character Keycode to underline under JDK1.3
      */
     private static void setMnemonicIndex (Object item, int index) {
         if (item instanceof AbstractButton) {
@@ -278,9 +275,9 @@ public final class Mnemonics extends Object {
 
     /**
      * Getter for the used Resource bundle (org.openide.awt.Mnemonics).
-     * Used to avoid calling </code>ResourceBundle.getBundle(...)</code>
-     * many times in defferent places of the code.
-     * Does no caching, it's simply an utility method.
+     * Used to avoid calling <code>ResourceBundle.getBundle(...)</code>
+     * many times in different places of the code.
+     * Does no caching, it's simply a utility method.
      */
     private static ResourceBundle getBundle() {
         return ResourceBundle.getBundle("org.openide.awt.Mnemonics"); 

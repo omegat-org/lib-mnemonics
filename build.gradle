@@ -1,17 +1,23 @@
 plugins {
-  id 'com.jfrog.bintray' version '1.6'
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+    id 'com.github.spotbugs' version '4.7.10'
+    id("io.github.gradle-nexus.publish-plugin") version "1.2.0"
 }
 
-apply plugin: 'java'
-apply plugin: 'maven-publish'
-
-sourceCompatibility = '1.6'
-targetCompatibility = '1.6'
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+    withSourcesJar()
+    withJavadocJar()
+}
 
 version = '1.1'
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 test {
@@ -41,49 +47,70 @@ sourceSets {
     }
 }
 
-task sourceJar(type: Jar) {
-    from sourceSets.main.allJava
-}
-
 javadoc {
     failOnError = false
 }
 
-task javadocJar(type: Jar) {
-    from javadoc.outputs
+spotbugs {
+    reportLevel = 'high'
 }
 
 publishing {
     publications {
-        MyPublication(MavenPublication) {
-            groupId 'org.omegat'
-            artifactId 'lib-mnemonics'
-            version version
-
+        mavenJava(MavenPublication) {
+            groupId = 'org.omegat'
+            artifactId = 'lib-mnemonics'
             from components.java
-            artifact sourceJar {
-                classifier 'sources'
-            }
-            artifact javadocJar {
-                classifier 'javadoc'
+
+            pom {
+                name = 'OmegaT'
+                description = 'The free translation memory tool'
+                url = 'https://omegat.org'
+                scm {
+                    connection = "scm:git:https://github.com/omegat-org/lib-mnemonics/"
+                    developerConnection = "scm:git:https:/github.com/omegat-org/lib-mnemonics/"
+                    url = "https://github.com/omegat-org/lib-mnemonics/"
+                }
+                licenses {
+                    license {
+                        name = 'The GNU General Public License, Version 2.0'
+                        url = 'https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'omegat'
+                        name = 'OmegaT Developers'
+                        email = 'info@omegat.org'
+                    }
+                }
             }
         }
     }
 }
 
-bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    pkg {
-        repo = 'maven'
-        name = 'lib-mnemonics'
-        licenses = ['GPL-2.0']
-        userOrg = 'omegat-org'
-        websiteUrl = 'https://github.com/omegat-org/lib-mnemonics'
-        vcsUrl = 'https://github.com/omegat-org/lib-mnemonics.git'
-        version {
-            name = project.version
+signing {
+    sign publishing.publications.mavenJava
+    if (!findProperty("signing.keyId")) {
+        useGpgCmd()
+    }
+}
+
+nexusPublishing {
+    repositories{
+        sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+            username.set(project.property("sonatypeUsername")?.toString()?: System.getenv("SONATYPE_USER"))
+            password.set(project.property("sonatypePassword")?.toString()?: System.getenv("SONATYPE_PASS"))
         }
     }
-    publications = ['MyPublication']
+}
+
+tasks.sourcesJar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+tasks.jar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
