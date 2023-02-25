@@ -57,7 +57,8 @@ public final class MnemonicsTest {
         JMenuItem item = new JMenuItem();
         Mnemonics.setLocalizedText(item, "&Simple Text");
         Assert.assertEquals("Simple Text", item.getText());
-        Assert.assertEquals(0, item.getDisplayedMnemonicIndex());
+        Assert.assertEquals(isMacOS()? -1: 0, item.getDisplayedMnemonicIndex());
+        Assert.assertEquals(isMacOS()? 0: 'S', item.getMnemonic());
         //
         Mnemonics.setLocalizedText(item, "Rock & Roll");
         Assert.assertEquals("Rock & Roll", item.getText());
