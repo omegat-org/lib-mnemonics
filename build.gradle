@@ -50,8 +50,12 @@ sourceSets {
 
 tasks.check.dependsOn(javadoc)
 
-spotbugs {
-    reportLevel = 'high'
+spotbugsMain {
+    reports {
+        html {
+            required = true
+        }
+    }
 }
 
 publishing {
