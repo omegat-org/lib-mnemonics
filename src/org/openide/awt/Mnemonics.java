@@ -64,6 +64,8 @@ public final class Mnemonics extends Object {
     /**
      * Removes any mnemonics in the given text. 
      * To be used for components which do not support mnemonics at all (example: contextual menus in Swing)
+     * @param text text with mnemonics &amp; character
+     * @return text without mnemonics &amp; character
      */
     public static String removeMnemonics(String text) {
         text = RE_MNEMONIC_END.matcher(text).replaceFirst("");
