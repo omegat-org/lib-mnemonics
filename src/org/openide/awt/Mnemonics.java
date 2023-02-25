@@ -285,7 +285,7 @@ public final class Mnemonics extends Object {
         return ResourceBundle.getBundle("org.openide.awt.Mnemonics"); 
     }
 
-    private static boolean isMacOS() {
+    static boolean isMacOS() {
         return System.getProperty("os.name").contains("OS X");
     }
 }
