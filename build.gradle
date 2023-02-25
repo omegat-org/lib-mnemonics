@@ -48,9 +48,7 @@ sourceSets {
     }
 }
 
-javadoc {
-    failOnError = false
-}
+tasks.check.dependsOn(javadoc)
 
 spotbugs {
     reportLevel = 'high'
