@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 * Introduce `Mnemonics.removeMnemonics`
+* Test cases
 
 ### Changed
 * Licensed on GNU General Public License Version 3.0 or later.
@@ -19,9 +20,11 @@ All notable changes to this project will be documented in this file.
   - automatically run gradle check
   - CodeQL analysis
   - Spotbugs analysis
+  - on macOS and Linux
 * Start recording change log
 * Gradle: nexus-publish plugin
 * Gradle: signing
+* Gradle: set duplicates strategy to be INCLUDE
 
 ### Fixed
 * Javadoc errors
