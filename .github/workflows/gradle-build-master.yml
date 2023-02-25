@@ -19,5 +19,7 @@ jobs:
     - uses: kiancross/checkstyle-annotations-action@v1
     - uses: gradle/gradle-build-action@v2
       name: gradle check
+      env:
+        CI: true
       with:
-        arguments: check
+        arguments: check -Pheadless=true

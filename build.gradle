@@ -26,6 +26,10 @@ dependencies {
 
 test {
     useJUnit()
+    // Test in headless mode with ./gradlew test -Pheadless
+    if (project.hasProperty('headless') || System.getenv("CI")) {
+        systemProperty 'java.awt.headless', 'true'
+    }
 }
 
 sourceSets {
