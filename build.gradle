@@ -55,6 +55,13 @@ sourceSets {
 
 tasks.check.dependsOn(javadoc)
 
+jar {
+    manifest {
+        attributes('Automatic-Module-Name': 'org.omegat.mnemonics')
+    }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
 spotbugsMain {
     reports {
         html {
@@ -120,9 +127,5 @@ if (sonatypeUsername != null && sonatypePassword != null) {
 }
 
 tasks.sourcesJar {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
-
-tasks.jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
