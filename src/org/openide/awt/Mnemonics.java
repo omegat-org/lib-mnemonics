@@ -198,7 +198,7 @@ public final class Mnemonics {
      * @param locale locale of the text.
      * @param index Index of the Character to underline under JDK1.4
      */
-    public static void setMnemonicAndIndex(Object item, char ch, int index, Locale locale) {
+    static void setMnemonicAndIndex(Object item, char ch, int index, Locale locale) {
         
         // OmegaT tweak
         // if we're running on non-MacOSX, we don't set any mnemonics
