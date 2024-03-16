@@ -45,7 +45,9 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.JLabel;
 
 /**
  * Support class for setting button, menu, and label text strings with mnemonics.
