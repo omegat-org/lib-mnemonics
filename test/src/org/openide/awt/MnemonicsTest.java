@@ -20,7 +20,7 @@ import static org.openide.awt.Mnemonics.isMacOS;
 public final class MnemonicsTest {
 
     @Test
-    public void testRemoveMnemonics() throws Exception {
+    public void testRemoveMnemonics() {
         Assert.assertEquals("Simple test", Mnemonics.removeMnemonics("&Simple test"));
         Assert.assertEquals("Rock & Roll", Mnemonics.removeMnemonics("Rock & Roll"));
         // Parenthesis at the end, but with latin characters

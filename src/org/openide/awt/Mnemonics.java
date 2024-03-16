@@ -46,6 +46,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import javax.swing.AbstractButton;
+import javax.swing.Action;
 import javax.swing.JLabel;
 
 /**
@@ -54,7 +55,7 @@ import javax.swing.JLabel;
  * @since 3.37
  * @see <a href="http://www.netbeans.org/issues/show_bug.cgi?id=26640">Issue #26640</a>
  */
-public final class Mnemonics extends Object {
+public final class Mnemonics {
     
     private static final Pattern RE_MNEMONIC_END = Pattern.compile("\\s*\\(&[A-Za-z0-9]\\)(?=[.\\uFF1A]*$)");
     private static final Pattern RE_MNEMONIC_INSIDE = Pattern.compile("&(\\p{L})");
@@ -194,18 +195,20 @@ public final class Mnemonics extends Object {
 
      * @param item  AbstractButton/JLabel or subclasses
      * @param ch    Mnemonic char to set, may be a char in some locale
+     * @param locale locale of the text.
      * @param index Index of the Character to underline under JDK1.4
      */
-    private static void setMnemonicAndIndex (Object item, char ch, int index, Locale locale) {
+    static void setMnemonicAndIndex(Object item, char ch, int index, Locale locale) {
         
         // OmegaT tweak
         // if we're running on non-MacOSX, we don't set any mnemonics
-        if (isMacOS()) {
-			setMnemonic(item, 0);
+        if (isMacOS() || ch == 0) {
+            setMnemonic(item, 0);
+            setMnemonicIndex(item, -1);
         } else {
             if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') 
                     || (ch >= '0' && ch <= '9')) {
-                // it's latin character or arabic digit,
+                // it's a latin character or arabic digit,
                 // setting it as mnemonics
                 setMnemonic(item, ch);
                 // If it's something like "Save &As", we need to set another
@@ -213,20 +216,23 @@ public final class Mnemonics extends Object {
                 // see #29676
                 setMnemonicIndex(item, index);
             } else {
-                // it's non-latin, getting the latin correspondance
+                // it's non-latin, getting the latin correspondence
                 int latinCode = getLatinKeycode(ch, locale);
                 setMnemonic(item, latinCode);
-                if( latinCode!=0 )
+                if (latinCode == 0) {
+                    setMnemonicIndex(item, -1);
+                } else {
                     setMnemonicIndex(item, index);
+                }
             }
         }
     }
 
     /**
-     * Gets the Latin symbol which corresponds
+     * Gets the Latin symbol, which corresponds
      * to some non-Latin symbol on the localized keyboard.
-     * The search is done via lookup of Resource bundle 
-     * for pairs having the form (e.g.) <code>MNEMONIC_\u0424=A</code>.
+     * The search is done via lookup of a Resource bundle
+     * for pairs having the form (e.g.) <code>MNEMONIC_Ф=A</code>.
      *
      * @param localeChar non-Latin character or a punctuator to be used as mnemonic
      * @return character on latin keyboard, corresponding to the locale character,
@@ -256,11 +262,13 @@ public final class Mnemonics extends Object {
      *  <li>Under JDK1.4 calls the method on item
      *  <li>Under JDK1.3 adds " (&lt;latin character&gt;)" (if needed)
      *      to label and sets the latin character as mnemonics.
-     * @param item AbstractButton/JLabel or subclasses
+     * @param item AbstractButton/JLabel/Action or subclasses
      * @param index Index of the Character to underline under JDK1.4
      */
     private static void setMnemonicIndex (Object item, int index) {
-        if (item instanceof AbstractButton) {
+        if (item instanceof Action) {
+            ((Action) item).putValue(Action.DISPLAYED_MNEMONIC_INDEX_KEY, index);
+        } else if (item instanceof AbstractButton) {
             ((AbstractButton)item).setDisplayedMnemonicIndex(index);
         } else if (item instanceof JLabel) {
             ((JLabel)item).setDisplayedMnemonicIndex(index);
@@ -268,15 +276,17 @@ public final class Mnemonics extends Object {
     }
 
     /**
-     * Wrapper for AbstractButton/JLabel.setText  
-     * @param item AbstractButton/JLabel
+     * Wrapper for AbstractButton/JLabel.setText and Action.putValue.
+     * @param item AbstractButton/JLabel/Action
      * @param text the text to set
      */
     private static void setText(Object item, String text) {
-        if (item instanceof AbstractButton) {
-            ((AbstractButton)item).setText(text);
-        } else {
-            ((JLabel)item).setText(text);
+        if (item instanceof Action) {
+            ((Action) item).putValue(Action.NAME, text);
+        } else if (item instanceof AbstractButton) {
+            ((AbstractButton) item).setText(text);
+        } else if (item instanceof JLabel) {
+            ((JLabel) item).setText(text);
         }
     }
     
@@ -286,12 +296,15 @@ public final class Mnemonics extends Object {
      * @param mnem Mnemonic char to set, latin [a-z,A-Z], digit [0-9], or any VK_ code
      */
     private static void setMnemonic(Object item, int mnem) {
-        if(mnem>='a' && mnem<='z')
+        if (mnem>='a' && mnem<='z') {
             mnem=mnem+('A'-'a');
-        if (item instanceof AbstractButton) {
-            ((AbstractButton)item).setMnemonic(mnem);
+        }
+        if (item instanceof Action) {
+            ((Action) item).putValue(Action.MNEMONIC_KEY, mnem);
+        } else if (item instanceof AbstractButton) {
+            ((AbstractButton) item).setMnemonic(mnem);
         } else {
-            ((JLabel)item).setDisplayedMnemonic(mnem);
+            ((JLabel) item).setDisplayedMnemonic(mnem);
         }
     }
 
