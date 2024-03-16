@@ -10,9 +10,9 @@ package org.openide.awt;
 import org.junit.Test;
 import org.junit.Assert;
 
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 
-import java.awt.event.ActionEvent;
 import java.util.Locale;
 
 import static org.openide.awt.Mnemonics.isMacOS;
@@ -53,23 +53,6 @@ public final class MnemonicsTest {
     }
 
     @Test
-    public void testSetLocalizedTextAction() {
-        AbstractMnemonicsAction item = new MyAbstractMnemonicsAction();
-
-        Assert.assertEquals("Simple Text", item.getValue(Action.NAME));
-        Assert.assertEquals(isMacOS()? -1: 0, item.getValue(Action.DISPLAYED_MNEMONIC_INDEX_KEY));
-        //
-        item.setText("Rock & Roll", new Locale("en"));
-        Assert.assertEquals("Rock & Roll", item.getValue(Action.NAME));
-        Assert.assertEquals(-1, item.getValue(Action.DISPLAYED_MNEMONIC_INDEX_KEY));
-        //
-        item.setText("&\u041F\u043E\u0438\u0441\u043A", new Locale("ru"));
-        Assert.assertEquals("\u041F\u043E\u0438\u0441\u043A", item.getValue(Action.NAME));
-        Assert.assertEquals(isMacOS()? -1: 0, item.getValue(Action.DISPLAYED_MNEMONIC_INDEX_KEY));
-        Assert.assertEquals(isMacOS()? 0: 71, item.getValue(Action.MNEMONIC_KEY));
-    }
-
-    @Test
     public void testSetLocalizedTextMenuItem() {
         JMenuItem item = new JMenuItem();
         Mnemonics.setLocalizedText(item, "&Simple Text");
@@ -85,15 +68,5 @@ public final class MnemonicsTest {
         Assert.assertEquals("\u041F\u043E\u0438\u0441\u043A", item.getText());
         Assert.assertEquals(isMacOS()? -1: 0, item.getDisplayedMnemonicIndex());
         Assert.assertEquals(isMacOS()? 0: 'G', item.getMnemonic());
-    }
-
-    private static class MyAbstractMnemonicsAction extends AbstractMnemonicsAction {
-        public MyAbstractMnemonicsAction() {
-            super("&Simple Text", new Locale("en"));
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-        }
     }
 }

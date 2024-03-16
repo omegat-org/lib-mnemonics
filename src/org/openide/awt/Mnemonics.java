@@ -279,10 +279,12 @@ public final class Mnemonics {
      * @param text the text to set
      */
     private static void setText(Object item, String text) {
-        if (item instanceof AbstractButton) {
-            ((AbstractButton)item).setText(text);
+        if (item instanceof Action) {
+            ((Action) item).putValue(Action.NAME, text);
+        } else if (item instanceof AbstractButton) {
+            ((AbstractButton) item).setText(text);
         } else if (item instanceof JLabel) {
-            ((JLabel)item).setText(text);
+            ((JLabel) item).setText(text);
         }
     }
     
