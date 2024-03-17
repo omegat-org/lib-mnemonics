@@ -235,6 +235,7 @@ public final class Mnemonics {
      * for pairs having the form (e.g.) <code>MNEMONIC_Ф=A</code>.
      *
      * @param localeChar non-Latin character or a punctuator to be used as mnemonic
+     * @param locale locale of the specified character.
      * @return character on latin keyboard, corresponding to the locale character,
      *         or the appropriate VK_*** code (if there's no latin character 
      *         "under" the non-Latin one)
