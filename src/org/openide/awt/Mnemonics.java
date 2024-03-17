@@ -239,7 +239,7 @@ public final class Mnemonics {
      *         or the appropriate VK_*** code (if there's no latin character 
      *         "under" the non-Latin one)
      */
-    private static int getLatinKeycode(char localeChar, Locale locale) {
+    public static int getLatinKeycode(char localeChar, Locale locale) {
         try {
             // associated should be a latin character, arabic digit 
             // or an integer (KeyEvent.VK_***)
