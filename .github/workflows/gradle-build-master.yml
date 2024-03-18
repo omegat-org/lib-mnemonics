@@ -20,7 +20,7 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
     - uses: kiancross/checkstyle-annotations-action@v1
-    - uses: gradle/gradle-build-action@v2
+    - uses: gradle/gradle-build-action@v3
       name: gradle check
       env:
         CI: true
